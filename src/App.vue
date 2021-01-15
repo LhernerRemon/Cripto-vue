@@ -11,8 +11,8 @@ import PxHeader from "@/components/PxHeader";
 export default {
   name: "App",
   components: {
-    PxHeader,
-  },
+    PxHeader
+  }
 };
 </script>
 

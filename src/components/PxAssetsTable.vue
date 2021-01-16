@@ -10,12 +10,20 @@
         <th>Precio</th>
         <th>Cap. de Mercado</th>
         <th>Variación 24hs</th>
-        <td class="hidden sm:block"></td>
+        <td class="hidden sm:block">
+          <input
+            class="bg-gray-100 focus:outline-none border-b border-gray-400 py-2 px-4 block w-full appearance-none leading-normal"
+            id="filter"
+            placeholder="Buscar..."
+            type="text"
+            v-model="filter"
+          />
+        </td>
       </tr>
     </thead>
     <tbody>
       <tr
-        v-for="l in lista"
+        v-for="l in filterAssets"
         :key="l.id"
         class="border-b border-gray-200 hover:bg-gray-100 hover:bg-orange-100"
       >
@@ -30,24 +38,78 @@
           />
         </td>
         <td>{{ l.rank }}</td>
-        <td>{{ l.name }}</td>
-        <td>{{ l.priceUsd | dollar}}</td>
-        <td>{{ l.marketCapUsd | dollar}}</td>
-        <td :class="l.changePercent24Hr.includes('-') ? 'text-red-600': 'text-green-600'">{{ l.changePercent24Hr | percent }}</td>
-        <td class="hidden sm:block"></td>
+        <td>
+          <router-link
+            class="hover:underline text-green-600"
+            :to="{ name: 'coin-detail', params: { id: l.id } }"
+          >
+            {{ l.name }}
+          </router-link>
+          <small class="ml-1 text-gray-500">
+            {{ l.symbol }}
+          </small>
+        </td>
+        <td>{{ l.priceUsd | dollar }}</td>
+        <td>{{ l.marketCapUsd | dollar }}</td>
+        <td
+          :class="
+            l.changePercent24Hr.includes('-')
+              ? 'text-red-600'
+              : 'text-green-600'
+          "
+        >
+          {{ l.changePercent24Hr | percent }}
+        </td>
+        <td class="hidden sm:block">
+          <px-button @custom-click="goToCoin(l.id)">
+            <span>Detalle</span>
+          </px-button>
+          <button
+            class="ml-2 bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-2 border border-green-500 hover:border-transparent rounded"
+            @click="goToCoin(l.id)"
+          >
+            Detalle2
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
 </template>
 
 <script>
+import PxButton from "@/components/PxButton";
+
 export default {
   name: "PxAssetsTable",
-
+  data(){
+    return{
+      filter:""
+    }
+  },
+  components: {
+    PxButton
+  },
+  computed:{
+    filterAssets(){
+      if(!this.filter){
+        return this.lista
+      }
+      return this.lista.filter(
+        a=>
+          a.symbol.toLowerCase().includes(this.filter.toLowerCase()) ||
+          a.name.toLowerCase().includes(this.filter.toLowerCase())
+      )
+    }
+  },
   props: {
     lista: {
       type: Array,
       default: () => []
+    }
+  },
+  methods: {
+    goToCoin(id) {
+      this.$router.push({ name: "coin-detail", params: { id: id } });
     }
   }
 };

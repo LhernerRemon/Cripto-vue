@@ -1,10 +1,15 @@
 <template>
   <div class="flex-col">
-    <template v-if="asset.id">
+    <div class="flex justify-center">
+      <bounce-loader :loading="isLoading" :color="'#68d391'" :size="100" />
+    </div>
+    <template v-if="!isLoading">
       <div class="flex flex-col sm:flex-row justify-around items-center">
         <div class="flex flex-col items-center">
           <img
-            :src="`https://static.coincap.io/assets/icons/${asset.symbol.toLowerCase()}@2x.png`"
+            :src="
+              `https://static.coincap.io/assets/icons/${asset.symbol.toLowerCase()}@2x.png`
+            "
             :alt="asset.name"
             class="w-20 h-20 mr-5"
           />
@@ -38,7 +43,15 @@
             </li>
             <li class="flex justify-between">
               <b class="text-gray-600 mr-10 uppercase">Variación 24hs</b>
-              <span :class="asset.changePercent24Hr.includes('-') ? 'text-red-600': 'text-green-600'">{{ asset.changePercent24Hr | percent }}</span>
+              <span
+                :class="
+                  asset.changePercent24Hr.includes('-')
+                    ? 'text-red-600'
+                    : 'text-green-600'
+                "
+              >
+                {{ asset.changePercent24Hr | percent }}
+              </span>
             </li>
           </ul>
         </div>
@@ -46,7 +59,9 @@
         <div class="my-10 sm:mt-0 flex flex-col justify-center text-center">
           <button
             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >Cambiar</button>
+          >
+            Cambiar
+          </button>
 
           <div class="flex flex-row my-5">
             <label class="w-full" for="convertValue">
@@ -58,73 +73,137 @@
             </label>
           </div>
 
-          <span class="text-xl"></span>
+          <span class="text-xl">a</span>
         </div>
       </div>
+      <line-chart
+        class="my-10"
+        :colors="['#b00', '#666']"
+        :min="min"
+        :max="max"
+        :data="history.map(h => [h.date, parseFloat(h.priceUsd).toFixed(2)])"
+      />
+      <h3 class="text-xl my-10">Mejores Ofertas de Cambio</h3>
+      <table>
+        <tr
+          class="border-b"
+          v-for="m in markets"
+          :key="`${m.exchangeId}-${m.priceUsd}`"
+        >
+          <td>
+            <b>{{ m.exchangeId }}</b>
+          </td>
+          <td>{{ m.priceUsd | dollar }}</td>
+          <td>{{ m.baseSymbol }} / {{ quoteSymbol }}</td>
+          <td>
+            <px-button
+              :is-loading="m.isLoading || false"
+              v-if="!m.url"
+              @custom-click="getWebSite(m)"
+            >
+              Obtener link
+            </px-button>
+            <a v-else class="hover:underline text-green-600" target="_blanck">{{
+              m.url
+            }}</a>
+          </td>
+        </tr>
+      </table>
     </template>
   </div>
 </template>
 
-
 <script>
 import axios from "axios";
-
+import PxButton from "@/components/PxButton";
 export default {
-    name: "coin-detail",
-    data(){
-        return{
-            asset: {},
-            history: []
-        }
+  name: "coin-detail",
+  components: {
+    PxButton
+  },
+  data() {
+    return {
+      asset: {},
+      history: [],
+      markets: [],
+      exchange: "",
+      isLoading: false
+    };
+  },
+  created() {
+    this.isLoading = true;
+  },
+  mounted() {
+    this.getCoin();
+    this.getAssetHistory();
+    this.getMarkets();
+  },
+  methods: {
+    getCoin() {
+      const URL = "https://api.coincap.io/v2";
+      const id = this.$route.params.id;
+      axios(`${URL}/assets/${id}`)
+        .then(response => {
+          this.asset = response.data.data;
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
-    mounted(){
-        this.getCoin(),
-        this.getAssetHistory()
+    getAssetHistory() {
+      const URL = "https://api.coincap.io/v2";
+      const now = new Date();
+      const end = now.getTime();
+      now.setDate(now.getDate() - 1);
+      const start = now.getTime();
+      const id = this.$route.params.id;
+      axios(
+        `${URL}/assets/${id}/history?interval=h1&start=${start}&end=${end}`
+      ).then(response => {
+        this.history = response.data.data;
+      });
     },
-    methods:{
-        getCoin(){
-            const URL = "https://api.coincap.io/v2";
-            const id = this.$route.params.id;
-            axios(`${URL}/assets/${id}`).then(response =>{
-                this.asset = response.data.data
-            })
-
-        },
-        getAssetHistory(){
-            const URL = "https://api.coincap.io/v2";
-            const now = new Date();
-            const end = now.getTime()
-            now.setDate(now.getDate()-1)
-            const start = now.getTime()
-            const id = this.$route.params.id;
-            axios(`${URL}/assets/${id}/history?interval=h1&start=${start}&end=${end}`)
-            .then(response => {
-                this.history = response.data.data
-            })
-        }
+    getMarkets() {
+      const URL = "https://api.coincap.io/v2";
+      const id = this.$route.params.id;
+      axios(`${URL}/assets/${id}/markets/?limit=5`).then(response => {
+        this.markets = response.data.data;
+      });
     },
-    computed:{
-        min(){
-            return Math.min(
-                ... this.history.map(h=>{
-                    return parseFloat(h.priceUsd).toFixed(2)
-                })
-            )
-        },
-        max(){
-            return Math.max(
-                ... this.history.map(h=>{
-                    return parseFloat(h.priceUsd).toFixed(2)
-                })
-            )
-        },
-        avg(){
-            return Math.abs(
-                ... this.history.map(h=>{
-                    return parseFloat(h.priceUsd).toFixed(2)
-                })
-            )
-        }
+    getWebSite(exchange) {
+      const URL = "https://api.coincap.io/v2";
+      this.$set(exchange, "isLoading", true);
+      axios(`${URL}/exchanges/${exchange.exchangeId}`)
+        .then(response => {
+          this.$set(exchange, "url", response.data.data.exchangeUrl);
+        })
+        .finally(() => {
+          this.$set(exchange, "isLoading", false);
+        });
     }
-}
+  },
+  computed: {
+    min() {
+      return Math.min(
+        ...this.history.map(h => {
+          return parseFloat(h.priceUsd).toFixed(2);
+        })
+      );
+    },
+    max() {
+      return Math.max(
+        ...this.history.map(h => {
+          return parseFloat(h.priceUsd).toFixed(2);
+        })
+      );
+    },
+    avg() {
+      return Math.abs(
+        ...this.history.map(h => {
+          return parseFloat(h.priceUsd).toFixed(2);
+        })
+      );
+    }
+  }
+};
 </script>

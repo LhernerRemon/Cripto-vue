@@ -81,24 +81,24 @@ import PxButton from "@/components/PxButton";
 
 export default {
   name: "PxAssetsTable",
-  data(){
-    return{
-      filter:""
-    }
+  data() {
+    return {
+      filter: ""
+    };
   },
   components: {
     PxButton
   },
-  computed:{
-    filterAssets(){
-      if(!this.filter){
-        return this.lista
+  computed: {
+    filterAssets() {
+      if (!this.filter) {
+        return this.lista;
       }
       return this.lista.filter(
-        a=>
+        a =>
           a.symbol.toLowerCase().includes(this.filter.toLowerCase()) ||
           a.name.toLowerCase().includes(this.filter.toLowerCase())
-      )
+      );
     }
   },
   props: {

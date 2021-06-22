@@ -49,12 +49,12 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       tab: null,
       lorem:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam officiis quaerat nostrum fugit consequuntur nam error rerum ducimus, molestiae quidem earum facere similique praesentium natus ipsa distinctio, alias vel cumque!",
-    };
-  },
-};
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam officiis quaerat nostrum fugit consequuntur nam error rerum ducimus, molestiae quidem earum facere similique praesentium natus ipsa distinctio, alias vel cumque!'
+    }
+  }
+}
 </script>

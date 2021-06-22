@@ -20,12 +20,12 @@
 export default {
   data: () => ({
     icons: [
-      "mdi-facebook",
-      "mdi-linkedin",
-      "mdi-instagram",
-      "mdi-github",
-      "mdi-gitlab",
-    ],
-  }),
-};
+      'mdi-facebook',
+      'mdi-linkedin',
+      'mdi-instagram',
+      'mdi-github',
+      'mdi-gitlab'
+    ]
+  })
+}
 </script>

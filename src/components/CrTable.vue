@@ -68,31 +68,31 @@
 
 <script>
 export default {
-  name: "CrTable",
-  data() {
+  name: 'CrTable',
+  data () {
     return {
-      search: "",
-    };
+      search: ''
+    }
   },
-  computed:{
-    filterAssets() {
+  computed: {
+    filterAssets () {
       if (!this.search) {
-        return this.cryptos;
+        return this.cryptos
       }
       return this.cryptos_all.filter(
         a =>
           a.symbol.toLowerCase().includes(this.search.toLowerCase()) ||
           a.name.toLowerCase().includes(this.search.toLowerCase())
-      );
+      )
     }
 
   },
   props: {
     cryptos: Array,
     cryptos_all: Array,
-    loaderTable: Boolean,
-  },
-};
+    loaderTable: Boolean
+  }
+}
 </script>
 <style>
 .input-weight {

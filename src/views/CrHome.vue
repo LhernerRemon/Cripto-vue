@@ -17,51 +17,51 @@
 </template>
 
 <script>
-import CrTable from "@/components/CrTable";
-import axios from "@/plugins/axios";
+import CrTable from '@/components/CrTable'
+import axios from '@/plugins/axios'
 export default {
-  name: "CrHome",
-  data() {
+  name: 'CrHome',
+  data () {
     return {
       cryptos: [],
-      cryptos_all:[],
+      cryptos_all: [],
       loaderTable: false,
       page: 1,
       all_result: 0,
-      initial_page:0,
-      end_page:9
-    };
+      initial_page: 0,
+      end_page: 9
+    }
   },
   components: {
-    CrTable,
+    CrTable
   },
-  created() {
-    this.loaderTable = true;
+  created () {
+    this.loaderTable = true
   },
 
-  async mounted() {
+  async mounted () {
     try {
-      const cryptos = await axios.get(`/assets`);
-      this.cryptos = cryptos.data.data;
+      const cryptos = await axios.get('/assets')
+      this.cryptos = cryptos.data.data
       this.cryptos_all = cryptos.data.data
-      this.loaderTable = false;
-      this.all_result = this.cryptos.length / 10;
+      this.loaderTable = false
+      this.all_result = this.cryptos.length / 10
     } catch (e) {
-      console.error("Mounted Home", e);
+      console.error('Mounted Home', e)
     }
   },
-  methods:{
-    changePage(){
-      this.initial_page = (this.page*10)-10;
-      this.end_page = (this.page*10);
-      this.loaderTable = false;
+  methods: {
+    changePage () {
+      this.initial_page = (this.page * 10) - 10
+      this.end_page = (this.page * 10)
+      this.loaderTable = false
     }
   },
-  watch:{
-    page(){
-      this.loaderTable = true;
-      this.changePage();
+  watch: {
+    page () {
+      this.loaderTable = true
+      this.changePage()
     }
   }
-};
+}
 </script>

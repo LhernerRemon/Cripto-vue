@@ -1,17 +1,18 @@
-import Vue from "vue";
-import App from "./App.vue";
-import router from "./router";
-import store from "./store";
-import vuetify from "./plugins/vuetify";
-import "@/plugins/filters";
-import "./assets/css/font.css";
-import "@/plugins/spinners";
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+import vuetify from './plugins/vuetify'
+import '@/plugins/filters'
+import '@/assets/css/font.css'
+import '@/assets/css/global.scss'
+import '@/plugins/spinners'
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
 new Vue({
   router,
   store,
   vuetify,
-  render: (h) => h(App),
-}).$mount("#app");
+  render: (h) => h(App)
+}).$mount('#app')

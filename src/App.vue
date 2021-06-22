@@ -9,13 +9,13 @@
 </template>
 
 <script>
-import CrHeader from "@/components/CrHeader";
-import CrFooter from "@/components/CrFooter";
+import CrHeader from '@/components/CrHeader'
+import CrFooter from '@/components/CrFooter'
 export default {
-  name: "App",
+  name: 'App',
   components: {
     CrHeader,
-    CrFooter,
-  },
-};
+    CrFooter
+  }
+}
 </script>

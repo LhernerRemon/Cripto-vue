@@ -15,28 +15,28 @@
 </template>
 
 <script>
-import CrIcon from "@/components/CrIcon";
-import axios from "@/plugins/axios";
+import CrIcon from '@/components/CrIcon'
+import axios from '@/plugins/axios'
 
 export default {
-  name: "CrHeader",
-  data() {
+  name: 'CrHeader',
+  data () {
     return {
-      cryptosH: null,
-    };
-  },
-  components: {
-    CrIcon,
-  },
-  async mounted() {
-    try {
-      const cryptos = await axios.get(`/assets/?limit=3`);
-      this.cryptosH = cryptos.data.data;
-    } catch (e) {
-      console.error("Mounted Header", e);
+      cryptosH: null
     }
   },
-};
+  components: {
+    CrIcon
+  },
+  async mounted () {
+    try {
+      const cryptos = await axios.get('/assets/?limit=3')
+      this.cryptosH = cryptos.data.data
+    } catch (e) {
+      console.error('Mounted Header', e)
+    }
+  }
+}
 </script>
 
 <style scoped>

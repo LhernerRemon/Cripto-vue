@@ -21,6 +21,9 @@ import CrTable from '@/components/CrTable'
 import axios from '@/plugins/axios'
 export default {
   name: 'CrHome',
+  components: {
+    CrTable
+  },
   data () {
     return {
       cryptos: [],
@@ -32,9 +35,7 @@ export default {
       end_page: 9
     }
   },
-  components: {
-    CrTable
-  },
+
   created () {
     this.loaderTable = true
   },

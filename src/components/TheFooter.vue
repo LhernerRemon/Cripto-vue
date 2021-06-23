@@ -10,7 +10,9 @@
         {{ new Date().getFullYear() }} — <strong>RrQq</strong>
       </v-col>
       <v-col class="third lighten-2 pb-5 text-center white--text" cols="12">
-        <router-link to="/about" class="white--text myhover">About</router-link>
+        <router-link to="/about" class="white--text myhover">
+          About
+        </router-link>
       </v-col>
     </v-row>
   </v-footer>
@@ -18,6 +20,7 @@
 
 <script>
 export default {
+  name: 'TheFooter',
   data: () => ({
     icons: [
       'mdi-facebook',

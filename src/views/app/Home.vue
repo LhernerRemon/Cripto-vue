@@ -4,7 +4,7 @@
       <v-row justify="center">
         <scale-loader color="#68d391" :loading="loaderTable" :size="20" />
 
-        <cr-table v-if="!loaderTable" :cryptos="cryptos.slice(initial_page,end_page)" :cryptos_all="cryptos_all" />
+        <cripto-table v-if="!loaderTable" :cryptos="cryptos.slice(initial_page,end_page)" :cryptos_all="cryptos_all" />
       </v-row>
     </v-container>
     <v-pagination
@@ -12,17 +12,17 @@
       :length="all_result"
       circle
       :total-visible="7"
-    ></v-pagination>
+    />
   </v-card>
 </template>
 
 <script>
-import CrTable from '@/components/CrTable'
+import CriptoTable from '@/components/cripto/CriptoTable'
 import axios from '@/plugins/axios'
 export default {
-  name: 'CrHome',
+  name: 'Home',
   components: {
-    CrTable
+    CriptoTable
   },
   data () {
     return {
@@ -33,6 +33,12 @@ export default {
       all_result: 0,
       initial_page: 0,
       end_page: 9
+    }
+  },
+  watch: {
+    page () {
+      this.loaderTable = true
+      this.changePage()
     }
   },
 
@@ -56,12 +62,6 @@ export default {
       this.initial_page = (this.page * 10) - 10
       this.end_page = (this.page * 10)
       this.loaderTable = false
-    }
-  },
-  watch: {
-    page () {
-      this.loaderTable = true
-      this.changePage()
     }
   }
 }

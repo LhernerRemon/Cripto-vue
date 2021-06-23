@@ -4,7 +4,7 @@
       <template v-slot:default>
         <thead>
           <tr>
-            <th class="text-left"></th>
+            <th class="text-left" />
             <th class="text-left">
               <h3>Ranking</h3>
             </th>
@@ -22,13 +22,12 @@
             </th>
             <th class="font-weight-light" style="max-width:250px">
               <v-text-field
-                label="Buscar"
                 v-model="search"
+                label="Buscar"
                 clearable
                 color="third"
                 prepend-icon="mdi-magnify"
-              >
-              </v-text-field>
+              />
             </th>
           </tr>
         </thead>
@@ -42,14 +41,16 @@
                 alt="c.id"
                 max-height="55px"
                 max-width="55px"
-              ></v-img>
+              />
             </td>
             <td>{{ c.rank }}</td>
             <td>
               <div class="d-flex">
-                <router-link to="/" class="text-subtitle-1 myhover">{{
-                  c.name
-                }}</router-link>
+                <router-link to="/" class="text-subtitle-1 myhover">
+                  {{
+                    c.name
+                  }}
+                </router-link>
                 <div class="grey--text ml-2 align-self-center">
                   {{ c.symbol }}
                 </div>
@@ -58,7 +59,11 @@
             <td>{{ c.priceUsd | df }}</td>
             <td>{{ c.marketCapUsd | df }}</td>
             <td>{{ c.changePercent24Hr | pf }}</td>
-            <td><v-btn color="third" outlined>Detalle</v-btn></td>
+            <td>
+              <v-btn color="third" outlined>
+                Detalle
+              </v-btn>
+            </td>
           </tr>
         </tbody>
       </template>
@@ -69,6 +74,17 @@
 <script>
 export default {
   name: 'CrTable',
+  props: {
+    cryptos: {
+      type: Array,
+      default: () => []
+    },
+    cryptosAll: {
+      type: Array,
+      default: () => []
+    },
+    loaderTable: Boolean
+  },
   data () {
     return {
       search: ''
@@ -79,18 +95,13 @@ export default {
       if (!this.search) {
         return this.cryptos
       }
-      return this.cryptos_all.filter(
+      return this.cryptosAll.filter(
         a =>
           a.symbol.toLowerCase().includes(this.search.toLowerCase()) ||
           a.name.toLowerCase().includes(this.search.toLowerCase())
       )
     }
 
-  },
-  props: {
-    cryptos: Array,
-    cryptos_all: Array,
-    loaderTable: Boolean
   }
 }
 </script>

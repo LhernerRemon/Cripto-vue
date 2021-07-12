@@ -34,7 +34,7 @@ export default {
   },
   async created () {
     try {
-      const { data } = await axios.get('/assets/?limit=3')
+      const { data } = await axios.get('https://api.coincap.io/v2/assets?limit=3')
       this.cryptosTop = data.data
     } catch (e) {
       console.error('Error fetch top criptos', e)

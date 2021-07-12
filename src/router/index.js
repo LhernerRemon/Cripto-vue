@@ -10,11 +10,11 @@ const routes = [
   {
     path: '/',
     component: AppLayout,
-    redirect: { name: 'Home' },
+    redirect: { name: 'home' },
     children: [
       {
         path: '/inicio',
-        name: 'Home',
+        name: 'home',
         component: () => import(/* webpackChunkName: "home" */ '@/views/app/Home.vue')
       },
       {
@@ -32,11 +32,11 @@ const routes = [
   {
     path: '/auth',
     component: AuthLayout,
-    redirect: { name: 'Login' },
+    redirect: { name: 'login' },
     children: [
       {
         path: '/login',
-        name: 'Login',
+        name: 'login',
         component: () => import(/* webpackChunkName: "home" */ '@/views/auth/Login.vue')
       }
     ]

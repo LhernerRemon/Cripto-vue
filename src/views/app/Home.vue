@@ -48,7 +48,7 @@ export default {
 
   async mounted () {
     try {
-      const cryptos = await axios.get('/assets')
+      const cryptos = await axios.get('https://api.coincap.io/v2/assets/')
       this.cryptos = cryptos.data.data
       this.cryptos_all = cryptos.data.data
       this.loaderTable = false
